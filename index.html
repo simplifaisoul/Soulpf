@@ -44,6 +44,26 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- Additional SEO and Performance Meta Tags -->
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//www.linkedin.com">
+    <link rel="dns-prefetch" href="//github.com">
+    <link rel="dns-prefetch" href="//simplifai.com">
+    
     <!-- Canonical URL -->
     <link rel="canonical" href="https://simplifaisoul.github.io/Soulpf/">
     
@@ -142,8 +162,35 @@
     </script>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-rocket"></i>
+                <span>SM</span>
+            </div>
+            <div class="loading-text">Initializing AI Portfolio...</div>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="loading-percentage">0%</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Screen reader only live region for announcements -->
+    <div aria-live="polite" aria-atomic="true" class="sr-only" id="screenReaderAnnouncements"></div>
+    
+    <!-- Particle Background -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
     
     <!-- Navigation -->
     <header class="navbar">
@@ -167,15 +214,34 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#skills" class="nav-link" aria-label="Navigate to skills section">
+                            <i class="fas fa-code"></i>
+                            <span>Skills</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#services" class="nav-link" aria-label="Navigate to services section">
                             <i class="fas fa-cogs"></i>
                             <span>Services</span>
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#testimonials" class="nav-link" aria-label="Navigate to testimonials section">
+                            <i class="fas fa-quote-left"></i>
+                            <span>Testimonials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#contact" class="nav-link" aria-label="Navigate to contact section">
                             <i class="fas fa-envelope"></i>
                             <span>Contact</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://calendly.com/soulsimplifai" target="_blank" class="nav-cta" aria-label="Book a meeting or demo with Souleimen Mrad" role="button" rel="noopener noreferrer">
+                            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                            <span>Book Demo</span>
+                            <span class="cta-badge">Available Now</span>
                         </a>
                     </li>
                 </ul>
@@ -188,66 +254,71 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <main id="main-content">
-        <section id="home" class="hero" aria-labelledby="hero-title">
+        <!-- Hero Section -->
+        <main id="main-content">
+        <section id="home" class="hero" aria-labelledby="hero-title" role="banner">
             <div class="hero-container">
-                <div class="hero-content">
+                <div class="hero-content" data-parallax="0.3">
                     <header class="hero-header">
                         <h1 class="hero-title" id="hero-title">
-                            <span class="hero-greeting">> Initializing...</span>
-                            <span class="hero-name">Souleimen Mrad</span>
+                            <span class="hero-greeting" aria-live="polite" data-typewriter="true" data-speed="50">> Initializing...</span>
+                            <span class="hero-name" data-typewriter="true" data-speed="80">Souleimen Mrad</span>
                         </h1>
-                        <h2 class="hero-subtitle">AI Expert & CEO of SimplifAI</h2>
+                        <h2 class="hero-subtitle" data-typewriter="true" data-speed="60">AI Expert & CEO of SimplifAI</h2>
                     </header>
                     <div class="hero-description">
                         <p>Pioneering the future of enterprise AI automation and web development. Transforming businesses through cutting-edge technology and innovative digital solutions.</p>
-                        <div class="hero-stats">
-                            <div class="stat-badge">
-                                <i class="fas fa-rocket"></i>
-                                <span>AI Innovation</span>
-                            </div>
-                            <div class="stat-badge">
-                                <i class="fas fa-code"></i>
-                                <span>Web Development</span>
-                            </div>
-                            <div class="stat-badge">
-                                <i class="fas fa-brain"></i>
-                                <span>Automation</span>
-                            </div>
+                    <div class="hero-stats stagger-fade-in">
+                        <div class="stat-badge floating">
+                            <i class="fas fa-rocket"></i>
+                            <span>AI Innovation</span>
+                        </div>
+                        <div class="stat-badge floating">
+                            <i class="fas fa-code"></i>
+                            <span>Web Development</span>
+                        </div>
+                        <div class="stat-badge floating">
+                            <i class="fas fa-brain"></i>
+                            <span>Automation</span>
                         </div>
                     </div>
-                    <div class="hero-buttons">
-                        <a href="#contact" class="btn btn-primary" aria-label="Get in touch with Souleimen">
-                            <i class="fas fa-paper-plane"></i>
-                            Get In Touch
+                    </div>
+                    <div class="hero-buttons" role="group" aria-label="Primary actions">
+                        <a href="#contact" class="btn btn-primary" role="button" aria-label="Get in touch with Souleimen Mrad">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            <span>Get In Touch</span>
                         </a>
-                        <a href="#services" class="btn btn-secondary" aria-label="View services offered">
-                            <i class="fas fa-th-large"></i>
-                            View Services
+                        <a href="#services" class="btn btn-secondary" role="button" aria-label="View services offered by Souleimen Mrad">
+                            <i class="fas fa-th-large" aria-hidden="true"></i>
+                            <span>View Services</span>
                         </a>
                     </div>
-                    <div class="hero-social">
-                        <a href="https://www.linkedin.com/in/souleimen-mrad-676755223/" target="_blank" class="social-link" aria-label="Connect on LinkedIn">
-                            <i class="fab fa-linkedin"></i>
+                    <div class="hero-social" role="group" aria-label="Social media and contact links">
+                        <a href="https://www.linkedin.com/in/souleimen-mrad-676755223/" target="_blank" class="social-link" role="button" aria-label="Connect with Souleimen Mrad on LinkedIn" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin" aria-hidden="true"></i>
+                            <span class="sr-only">LinkedIn</span>
                         </a>
-                        <a href="https://simplifai.com" target="_blank" class="social-link" aria-label="Visit SimplifAI website">
-                            <i class="fas fa-globe"></i>
+                        <a href="https://simplifai.com" target="_blank" class="social-link" role="button" aria-label="Visit SimplifAI company website" rel="noopener noreferrer">
+                            <i class="fas fa-globe" aria-hidden="true"></i>
+                            <span class="sr-only">Website</span>
                         </a>
-                        <a href="mailto:soulsimplifai@gmail.com" class="social-link" aria-label="Send email">
-                            <i class="fas fa-envelope"></i>
+                        <a href="mailto:soulsimplifai@gmail.com" class="social-link" role="button" aria-label="Send email to soulsimplifai@gmail.com">
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <span class="sr-only">Email</span>
                         </a>
-                        <a href="tel:+1-613-462-1043" class="social-link" aria-label="Call +1-613-462-1043">
-                            <i class="fas fa-phone"></i>
+                        <a href="tel:+1-613-462-1043" class="social-link" role="button" aria-label="Call Souleimen Mrad at +1-613-462-1043">
+                            <i class="fas fa-phone" aria-hidden="true"></i>
+                            <span class="sr-only">Phone</span>
                         </a>
-                        <a href="https://github.com/simplifaisoul" target="_blank" class="social-link" aria-label="Visit GitHub profile">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/simplifaisoul" target="_blank" class="social-link" role="button" aria-label="Visit Souleimen Mrad's GitHub profile" rel="noopener noreferrer">
+                            <i class="fab fa-github" aria-hidden="true"></i>
+                            <span class="sr-only">GitHub</span>
                         </a>
                     </div>
                 </div>
-                <div class="hero-image">
+                <div class="hero-image" data-parallax="0.5">
                     <div class="terminal-container">
-                        <div class="terminal" role="img" aria-label="Terminal showing Souleimen's profile and services">
+                        <div class="terminal glitch-enhanced" role="img" aria-label="Terminal showing Souleimen's profile and services" data-text="Terminal">
                             <div class="terminal-header">
                                 <div class="terminal-buttons">
                                     <span class="terminal-button terminal-close" aria-label="Close terminal"></span>
@@ -282,6 +353,20 @@
                                 </div>
                                 <div class="terminal-line">
                                     <span class="terminal-prompt">$</span>
+                                    <span class="terminal-command">echo "Ready to transform your business?"</span>
+                                </div>
+                                <div class="terminal-output">
+                                    <div style="color: #10b981;">Ready to transform your business?</div>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-command">curl calendly.com/soulsimplifai/book</span>
+                                </div>
+                                <div class="terminal-output">
+                                    <div style="color: #f59e0b;">📅 Booking your AI transformation session...</div>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
                                     <span class="terminal-cursor"></span>
                                 </div>
                             </div>
@@ -294,9 +379,9 @@
         <!-- About Section -->
         <section id="about" class="about" aria-labelledby="about-title">
             <div class="container">
-                <header class="section-header">
-                    <h2 class="section-title" id="about-title">About Me</h2>
-                    <p class="section-subtitle">Transforming Ideas into Intelligent Digital Solutions</p>
+                <header class="section-header reveal">
+                    <h2 class="section-title gradient-text" id="about-title">About Me</h2>
+                    <p class="section-subtitle" data-typewriter="true" data-speed="30">Transforming Ideas into Intelligent Digital Solutions</p>
                 </header>
                 <div class="about-content">
                     <div class="about-main">
@@ -313,8 +398,8 @@
                                 complex challenges but drives measurable business growth and operational excellence.
                             </p>
                             <div class="expertise-grid">
-                                <div class="expertise-item">
-                                    <div class="expertise-icon">
+                                <div class="expertise-item card-3d reveal">
+                                    <div class="expertise-icon pulse-subtle">
                                         <i class="fas fa-brain"></i>
                                     </div>
                                     <div class="expertise-content">
@@ -322,8 +407,8 @@
                                         <p>Cutting-edge artificial intelligence solutions</p>
                                     </div>
                                 </div>
-                                <div class="expertise-item">
-                                    <div class="expertise-icon">
+                                <div class="expertise-item card-3d reveal">
+                                    <div class="expertise-icon pulse-subtle">
                                         <i class="fas fa-code"></i>
                                     </div>
                                     <div class="expertise-content">
@@ -331,8 +416,8 @@
                                         <p>End-to-end web application development</p>
                                     </div>
                                 </div>
-                                <div class="expertise-item">
-                                    <div class="expertise-icon">
+                                <div class="expertise-item card-3d reveal">
+                                    <div class="expertise-icon pulse-subtle">
                                         <i class="fas fa-robot"></i>
                                     </div>
                                     <div class="expertise-content">
@@ -340,8 +425,8 @@
                                         <p>Intelligent business process automation</p>
                                     </div>
                                 </div>
-                                <div class="expertise-item">
-                                    <div class="expertise-icon">
+                                <div class="expertise-item card-3d reveal">
+                                    <div class="expertise-icon pulse-subtle">
                                         <i class="fas fa-chart-line"></i>
                                     </div>
                                     <div class="expertise-content">
@@ -414,8 +499,8 @@
                     <p class="section-subtitle">Comprehensive AI and Web Development Solutions</p>
                 </header>
                 <div class="services-grid">
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-globe"></i>
                         </div>
                         <div class="service-content">
@@ -428,8 +513,8 @@
                             </ul>
                         </div>
                     </article>
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-robot"></i>
                         </div>
                         <div class="service-content">
@@ -442,8 +527,8 @@
                             </ul>
                         </div>
                     </article>
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-comments"></i>
                         </div>
                         <div class="service-content">
@@ -456,8 +541,8 @@
                             </ul>
                         </div>
                     </article>
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-cogs"></i>
                         </div>
                         <div class="service-content">
@@ -470,8 +555,8 @@
                             </ul>
                         </div>
                     </article>
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
                         <div class="service-content">
@@ -484,8 +569,8 @@
                             </ul>
                         </div>
                     </article>
-                    <article class="service-card">
-                        <div class="service-icon">
+                    <article class="service-card card-3d reveal">
+                        <div class="service-icon glow-pulse">
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <div class="service-content">
@@ -496,6 +581,208 @@
                                 <li><i class="fas fa-check"></i> Change Management</li>
                                 <li><i class="fas fa-check"></i> ROI Optimization</li>
                             </ul>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills" aria-labelledby="skills-title">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title" id="skills-title">Technical Expertise</h2>
+                    <p class="section-subtitle">Technologies & Skills We Master</p>
+                </header>
+                <div class="skills-content">
+                    <div class="skills-categories">
+                        <div class="skill-category">
+                            <h3>Frontend Development</h3>
+                            <div class="skills-grid">
+                                <div class="skill-item">
+                                    <i class="fab fa-react"></i>
+                                    <span>React</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-vuejs"></i>
+                                    <span>Vue.js</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-angular"></i>
+                                    <span>Angular</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-js"></i>
+                                    <span>JavaScript</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-css3-alt"></i>
+                                    <span>CSS3</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-html5"></i>
+                                    <span>HTML5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>Backend Development</h3>
+                            <div class="skills-grid">
+                                <div class="skill-item">
+                                    <i class="fab fa-node-js"></i>
+                                    <span>Node.js</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-python"></i>
+                                    <span>Python</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-php"></i>
+                                    <span>PHP</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-database"></i>
+                                    <span>SQL</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-leaf"></i>
+                                    <span>MongoDB</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-docker"></i>
+                                    <span>Docker</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>AI & Machine Learning</h3>
+                            <div class="skills-grid">
+                                <div class="skill-item">
+                                    <i class="fas fa-brain"></i>
+                                    <span>TensorFlow</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-robot"></i>
+                                    <span>PyTorch</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Scikit-learn</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-comments"></i>
+                                    <span>NLP</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Computer Vision</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-project-diagram"></i>
+                                    <span>Neural Networks</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>Cloud & DevOps</h3>
+                            <div class="skills-grid">
+                                <div class="skill-item">
+                                    <i class="fab fa-aws"></i>
+                                    <span>AWS</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-google"></i>
+                                    <span>Google Cloud</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-microsoft"></i>
+                                    <span>Azure</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fab fa-git-alt"></i>
+                                    <span>Git</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-infinity"></i>
+                                    <span>Kubernetes</span>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-server"></i>
+                                    <span>CI/CD</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials" aria-labelledby="testimonials-title">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title" id="testimonials-title">Client Testimonials</h2>
+                    <p class="section-subtitle">What Our Clients Say About Our Work</p>
+                </header>
+                <div class="testimonials-grid">
+                    <article class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">
+                                "Souleimen and the SimplifAI team transformed our business operations with their AI automation solutions. The results exceeded our expectations."
+                            </p>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <h4>Sarah Johnson</h4>
+                                    <p>CEO, TechStart Inc.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">
+                                "The custom web application developed by SimplifAI has streamlined our workflow and improved productivity by 40%."
+                            </p>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <h4>Michael Chen</h4>
+                                    <p>Operations Director, Global Logistics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">
+                                "Professional, innovative, and results-driven. Souleimen's expertise in AI and web development is unmatched."
+                            </p>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <h4>Emily Rodriguez</h4>
+                                    <p>CTO, Digital Innovations</p>
+                                </div>
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -874,6 +1161,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress">
+        <div class="progress-fill"></div>
+    </div>
 
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top" aria-label="Back to top">
