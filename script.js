@@ -317,7 +317,345 @@ document.addEventListener('DOMContentLoaded', () => {
 // Initialize reveal on scroll
 revealOnScroll();
 
-// Console welcome message
+// Loading Screen
+window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }, 1500);
+    }
+});
+
+// Back to Top Button
+const backToTopBtn = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.add('active');
+    } else {
+        backToTopBtn.classList.remove('active');
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// Enhanced Terminal Animation
+function animateTerminal() {
+    const terminalLines = document.querySelectorAll('.terminal-line');
+    terminalLines.forEach((line, index) => {
+        setTimeout(() => {
+            line.style.opacity = '1';
+            line.style.transform = 'translateX(0)';
+        }, index * 200);
+    });
+}
+
+// Initialize terminal animation
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(animateTerminal, 1000);
+});
+
+// Enhanced Form Validation
+function validateForm(formData) {
+    const errors = [];
+    
+    if (!formData.name || formData.name.trim().length < 2) {
+        errors.push('Name must be at least 2 characters long');
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+        errors.push('Please enter a valid email address');
+    }
+    
+    if (!formData.subject || formData.subject.trim().length < 3) {
+        errors.push('Subject must be at least 3 characters long');
+    }
+    
+    if (!formData.message || formData.message.trim().length < 10) {
+        errors.push('Message must be at least 10 characters long');
+    }
+    
+    return errors;
+}
+
+// Enhanced Contact Form
+contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+
+    const errors = validateForm(formData);
+    
+    if (errors.length > 0) {
+        showNotification(errors[0], 'error');
+        return;
+    }
+
+    const submitBtn = contactForm.querySelector('.btn-primary');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showNotification('Thank you for your message! I will get back to you soon.', 'success');
+        contactForm.reset();
+        
+        // Track form submission (analytics)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'form_submission', {
+                'event_category': 'Contact',
+                'event_label': 'Contact Form'
+            });
+        }
+        
+    } catch (error) {
+        showNotification('Error sending message. Please try again.', 'error');
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Real-time form validation
+document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+    input.addEventListener('blur', function() {
+        validateField(this);
+    });
+    
+    input.addEventListener('input', function() {
+        if (this.parentElement.classList.contains('error')) {
+            validateField(this);
+        }
+    });
+});
+
+function validateField(field) {
+    const formGroup = field.parentElement;
+    const value = field.value.trim();
+    let isValid = true;
+    let errorMessage = '';
+
+    // Remove existing error
+    const existingError = formGroup.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    formGroup.classList.remove('error');
+
+    switch(field.id) {
+        case 'name':
+            if (value.length < 2) {
+                isValid = false;
+                errorMessage = 'Name must be at least 2 characters';
+            }
+            break;
+        case 'email':
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid email';
+            }
+            break;
+        case 'subject':
+            if (value.length < 3) {
+                isValid = false;
+                errorMessage = 'Subject must be at least 3 characters';
+            }
+            break;
+        case 'message':
+            if (value.length < 10) {
+                isValid = false;
+                errorMessage = 'Message must be at least 10 characters';
+            }
+            break;
+    }
+
+    if (!isValid) {
+        formGroup.classList.add('error');
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = errorMessage;
+        formGroup.appendChild(errorDiv);
+    }
+
+    return isValid;
+}
+
+// Enhanced Intersection Observer
+const enhancedObserverOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const enhancedObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            
+            // Add staggered animation for grid items
+            if (entry.target.classList.contains('expertise-grid') || 
+                entry.target.classList.contains('tech-stack-grid')) {
+                const items = entry.target.querySelectorAll('.expertise-item, .tech-item');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('animate-in');
+                    }, index * 100);
+                });
+            }
+            
+            enhancedObserver.unobserve(entry.target);
+        }
+    });
+}, enhancedObserverOptions);
+
+// Observe more elements for animation
+document.addEventListener('DOMContentLoaded', () => {
+    const animateElements = document.querySelectorAll(
+        '.service-card, .stat-item, .highlight-item, .contact-method, .company-logo, ' +
+        '.expertise-grid, .tech-stack-grid, .achievement-card, .timeline-item'
+    );
+    
+    animateElements.forEach(el => {
+        enhancedObserver.observe(el);
+    });
+});
+
+// Counter Animation for Stats
+function animateCounter(element, target, duration = 2000) {
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        
+        if (element.dataset.suffix) {
+            element.textContent = Math.floor(current) + element.dataset.suffix;
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 16);
+}
+
+// Initialize counters when in view
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+            const target = parseInt(entry.target.dataset.target);
+            animateCounter(entry.target, target);
+            entry.target.classList.add('animated');
+            counterObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counterObserver.observe(counter);
+    });
+});
+
+// Enhanced Mobile Navigation
+const mobileMenuBtn = document.getElementById('mobile-menu');
+const navMenu = document.querySelector('.nav-menu');
+const navLinks = document.querySelectorAll('.nav-link');
+
+mobileMenuBtn.addEventListener('click', () => {
+    mobileMenuBtn.classList.toggle('active');
+    navMenu.classList.toggle('active');
+    document.body.classList.toggle('no-scroll');
+});
+
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+    });
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!mobileMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+    }
+});
+
+// Enhanced Scroll Progress Bar
+function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    
+    const progressBar = document.getElementById('scrollProgress');
+    if (progressBar) {
+        progressBar.style.width = scrollPercent + '%';
+    }
+}
+
+window.addEventListener('scroll', updateScrollProgress);
+
+// Theme Toggle (if implemented)
+function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+}
+
+// Initialize theme toggle
+document.addEventListener('DOMContentLoaded', initThemeToggle);
+
+// Enhanced Performance Monitoring
+function logPerformanceMetrics() {
+    if ('performance' in window) {
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+                console.log('DOM Interactive:', perfData.domInteractive - perfData.navigationStart, 'ms');
+            }, 0);
+        });
+    }
+}
+
+logPerformanceMetrics();
+
+// Enhanced Console Welcome Message
 console.log('%c🚀 Welcome to Souleimen Mrad\'s Portfolio!', 'color: #2563eb; font-size: 20px; font-weight: bold;');
 console.log('%cBuilt with passion and modern web technologies', 'color: #10b981; font-size: 14px;');
 console.log('%cInterested in collaboration? Reach out at soulsimplifai@gmail.com', 'color: #8b5cf6; font-size: 14px;');
+console.log('%c🎨 Enhanced with SEO, accessibility, and performance optimizations', 'color: #f59e0b; font-size: 12px;');
