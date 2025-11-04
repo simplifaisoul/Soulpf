@@ -319,7 +319,7 @@ revealOnScroll();
 
 // Loading Screen
 window.addEventListener('load', () => {
-    const loadingScreen = document.getElementById('loading-screen');
+    const loadingScreen = document.getElementById('loadingScreen');
     if (loadingScreen) {
         setTimeout(() => {
             loadingScreen.style.opacity = '0';
