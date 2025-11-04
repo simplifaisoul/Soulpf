@@ -1,17 +1,17 @@
 // Mobile Navigation Toggle
 const mobileMenu = document.getElementById('mobile-menu');
-const navMenu = document.querySelector('.nav-menu');
+const navMenuMobile = document.querySelector('.nav-menu');
 
 mobileMenu.addEventListener('click', () => {
     mobileMenu.classList.toggle('active');
-    navMenu.classList.toggle('active');
+    navMenuMobile.classList.toggle('active');
 });
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
         mobileMenu.classList.remove('active');
-        navMenu.classList.remove('active');
+        navMenuMobile.classList.remove('active');
     });
 });
 
@@ -338,17 +338,28 @@ backToTopBtn.addEventListener('click', () => {
 // Enhanced Terminal Animation
 function animateTerminal() {
     const terminalLines = document.querySelectorAll('.terminal-line');
+    if (terminalLines.length === 0) return;
+    
     terminalLines.forEach((line, index) => {
         setTimeout(() => {
-            line.style.opacity = '1';
-            line.style.transform = 'translateX(0)';
+            if (line) {
+                line.style.opacity = '1';
+                line.style.transform = 'translateX(0)';
+            }
         }, index * 200);
     });
 }
 
-// Initialize terminal animation
+// Initialize terminal animation (only if not already initialized)
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(animateTerminal, 1000);
+    if (!document.body.classList.contains('terminal-initialized')) {
+        document.body.classList.add('terminal-initialized');
+        setTimeout(() => {
+            if (!document.body.classList.contains('fully-loaded')) {
+                animateTerminal();
+            }
+        }, 1000);
+    }
 });
 
 // Enhanced Form Validation
@@ -613,13 +624,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Enhanced Mobile Navigation
 const mobileMenuBtn = document.getElementById('mobile-menu');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
+const navMenuEnhanced = document.querySelector('.nav-menu');
+const navLinksEnhanced = document.querySelectorAll('.nav-link');
 
-if (mobileMenuBtn && navMenu) {
+if (mobileMenuBtn && navMenuEnhanced) {
     mobileMenuBtn.addEventListener('click', () => {
         const isActive = mobileMenuBtn.classList.toggle('active');
-        navMenu.classList.toggle('active');
+        navMenuEnhanced.classList.toggle('active');
         document.body.classList.toggle('no-scroll');
         
         // Announce menu state to screen readers
@@ -627,24 +638,24 @@ if (mobileMenuBtn && navMenu) {
         
         // Focus management
         if (isActive) {
-            const firstNavLink = navMenu.querySelector('.nav-link');
+            const firstNavLink = navMenuEnhanced.querySelector('.nav-link');
             if (firstNavLink) firstNavLink.focus();
         }
     });
 
-    navLinks.forEach(link => {
+    navLinksEnhanced.forEach(link => {
         link.addEventListener('click', () => {
             mobileMenuBtn.classList.remove('active');
-            navMenu.classList.remove('active');
+            navMenuEnhanced.classList.remove('active');
             document.body.classList.remove('no-scroll');
         });
     });
 
     // Close mobile menu when clicking outside
     document.addEventListener('click', (e) => {
-        if (!mobileMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+        if (!mobileMenuBtn.contains(e.target) && !navMenuEnhanced.contains(e.target)) {
             mobileMenuBtn.classList.remove('active');
-            navMenu.classList.remove('active');
+            navMenuEnhanced.classList.remove('active');
             document.body.classList.remove('no-scroll');
         }
     });
@@ -653,7 +664,7 @@ if (mobileMenuBtn && navMenu) {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && mobileMenuBtn.classList.contains('active')) {
             mobileMenuBtn.classList.remove('active');
-            navMenu.classList.remove('active');
+            navMenuEnhanced.classList.remove('active');
             document.body.classList.remove('no-scroll');
             mobileMenuBtn.focus();
         }
@@ -733,10 +744,10 @@ function initAccessibility() {
         // Escape key to close mobile menu
         if (e.key === 'Escape') {
             const mobileMenu = document.getElementById('mobile-menu');
-            const navMenu = document.querySelector('.nav-menu');
-            if (mobileMenu && navMenu) {
+            const navMenuAccessibility = document.querySelector('.nav-menu');
+            if (mobileMenu && navMenuAccessibility) {
                 mobileMenu.classList.remove('active');
-                navMenu.classList.remove('active');
+                navMenuAccessibility.classList.remove('active');
                 document.body.classList.remove('no-scroll');
             }
         }
@@ -1241,20 +1252,38 @@ function throttle(func, limit) {
     };
 }
 
-// Initialize all enhancements
+// Initialize all enhancements (legacy support)
 document.addEventListener('DOMContentLoaded', () => {
+    // Prevent duplicate initialization
+    if (document.body.classList.contains('legacy-initialized')) {
+        return;
+    }
+    document.body.classList.add('legacy-initialized');
+    
     // Performance optimizations first
-    preloadCriticalResources();
-    optimizeFontLoading();
-    initLazyLoading();
+    try {
+        preloadCriticalResources();
+        optimizeFontLoading();
+        initLazyLoading();
+    } catch (error) {
+        console.warn('Performance optimizations failed:', error);
+    }
     
     // Then initialize other features
-    initAccessibility();
-    optimizePerformance();
-    initMicroInteractions();
+    try {
+        initAccessibility();
+        optimizePerformance();
+        initMicroInteractions();
+    } catch (error) {
+        console.warn('Feature initialization failed:', error);
+    }
     
     // Initialize custom cursor
-    new CustomCursor();
+    try {
+        new CustomCursor();
+    } catch (error) {
+        console.warn('Custom cursor failed to initialize:', error);
+    }
     
     // Add loading animation classes
     document.body.classList.add('aaa-enhanced');
@@ -1377,33 +1406,44 @@ class ParticleSystem {
 class LoadingScreen {
     constructor() {
         this.loadingScreen = document.getElementById('loadingScreen');
-        this.progressBar = document.querySelector('.progress-bar');
-        this.percentageText = document.querySelector('.loading-percentage');
+        this.progressBar = this.loadingScreen ? this.loadingScreen.querySelector('.progress-bar') : null;
+        this.percentageText = this.loadingScreen ? this.loadingScreen.querySelector('.loading-percentage') : null;
         this.progress = 0;
+        this.isLoading = false;
         this.init();
     }
 
     init() {
         if (!this.loadingScreen) return;
         
+        // Prevent multiple instances
+        if (window.loadingScreenInstance) {
+            return;
+        }
+        window.loadingScreenInstance = this;
+        
         this.simulateLoading();
     }
 
     simulateLoading() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+        
+        let progressSteps = [10, 25, 40, 60, 75, 85, 95, 100];
+        let currentStep = 0;
+        
         const interval = setInterval(() => {
-            this.progress += Math.random() * 15;
-            
-            if (this.progress >= 100) {
-                this.progress = 100;
+            if (currentStep < progressSteps.length) {
+                this.progress = progressSteps[currentStep];
+                this.updateProgress(this.progress);
+                currentStep++;
+            } else {
                 clearInterval(interval);
-                
                 setTimeout(() => {
                     this.hideLoadingScreen();
-                }, 500);
+                }, 300);
             }
-            
-            this.updateProgress(this.progress);
-        }, 200);
+        }, 150);
     }
 
     updateProgress(progress) {
@@ -1420,8 +1460,22 @@ class LoadingScreen {
             this.loadingScreen.classList.add('fade-out');
             
             setTimeout(() => {
-                this.loadingScreen.style.display = 'none';
+                if (this.loadingScreen) {
+                    this.loadingScreen.style.display = 'none';
+                }
+                // Initialize other components after loading
+                this.initializeAfterLoad();
             }, 500);
+        }
+    }
+
+    initializeAfterLoad() {
+        // Trigger animations and other initializations
+        document.body.classList.add('fully-loaded');
+        
+        // Initialize terminal animation
+        if (typeof animateTerminal === 'function') {
+            setTimeout(animateTerminal, 500);
         }
     }
 }
@@ -1848,24 +1902,55 @@ class PerformanceOptimizer {
 
 // Initialize all enhancements
 document.addEventListener('DOMContentLoaded', () => {
+    // Prevent multiple initializations
+    if (document.body.classList.contains('initialized')) {
+        return;
+    }
+    document.body.classList.add('initialized');
+    
     // Performance optimizations first
-    new PerformanceOptimizer();
+    try {
+        new PerformanceOptimizer();
+    } catch (error) {
+        console.warn('Performance optimizer failed to initialize:', error);
+    }
     
     // Initialize micro-interactions
-    new MicroInteractions();
+    try {
+        new MicroInteractions();
+    } catch (error) {
+        console.warn('Micro-interactions failed to initialize:', error);
+    }
     
-    // Initialize existing systems
-    new LoadingScreen();
-    new ParticleSystem();
-    new CustomCursor();
+    // Initialize loading screen first
+    try {
+        new LoadingScreen();
+    } catch (error) {
+        console.warn('Loading screen failed to initialize:', error);
+        // Fallback: hide loading screen manually
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+        }
+    }
+    
+    // Initialize other systems after a small delay
+    setTimeout(() => {
+        try {
+            new ParticleSystem();
+        } catch (error) {
+            console.warn('Particle system failed to initialize:', error);
+        }
+        
+        try {
+            new CustomCursor();
+        } catch (error) {
+            console.warn('Custom cursor failed to initialize:', error);
+        }
+    }, 100);
     
     // Add enhanced classes
     document.body.classList.add('aaa-enhanced');
-    
-    // Mark page as fully loaded
-    setTimeout(() => {
-        document.body.classList.add('fully-loaded');
-    }, 1000);
     
     // Console welcome with enhanced styling
     console.log('%c🚀 Welcome to Souleimen Mrad\'s Enhanced Portfolio!', 'color: #a855f7; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);');
